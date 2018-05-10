@@ -144,6 +144,64 @@ class SMBus(object):
                                            ffi.cast("__u8", val)) == -1:
             raise IOError(ffi.errno)
 
+    @validate(servoid=int)
+    def Bit_Read_ServoAngle(self, servo_id):
+        """Bit_Read_ServoAngle(servo_id) -> result
+        """
+        self._set_addr(80)
+        res = SMBUS.i2c_smbus_read_byte_data(self._fd, ffi.cast('__u8', servo_id))
+        if res == -1:
+            raise IOError(ffi.errno)
+        return res
+ 
+    @validate(servoid=int, angle=int)
+    def Bit_SetServo(self, servo_id, angle):
+        """Bit_SetServo(servo_id, angle)"""
+        self._set_addr(80)
+        if SMBUS.i2c_smbus_write_byte_data(self._fd, ffi.cast('__u8', servo_id), ffi.cast('__u8', angle)) == -1:
+            raise IOError(ffi.errno)
+ 
+    def Bit_ReSetServo(self):
+        """Bit_ReSetServo()"""
+        self._set_addr(80)
+        if SMBUS.i2c_smbus_write_byte_data(self._fd, ffi.cast('__u8', 0), ffi.cast('__u8', 1)) == -1:
+            raise IOError(ffi.errno)
+ 
+    def Bit_SaveServo(self):
+        """Bit_SaveServo()"""
+        self._set_addr(80)
+        if SMBUS.i2c_smbus_write_byte_data(self._fd, ffi.cast('__u8', 17), ffi.cast('__u8', 1)) == -1:
+            raise IOError(ffi.errno)
+ 
+    def Bit_ReadVol(self):
+        """Bit_ReadVol() -> result
+        """
+        self._set_addr(80)
+        res = SMBUS.i2c_smbus_read_byte_data(self._fd, ffi.cast('__u8', 18))
+        if res == -1:
+            raise IOError(ffi.errno)
+        return res
+ 
+    def Bit_SpeedCounter1(self):
+        """Bit_SpeedCounter1() -> result
+        """
+        self._set_addr(80)
+        res = SMBUS.i2c_smbus_read_byte_data(self._fd, ffi.cast('__u8', 19))
+        if res == -1:
+            raise IOError(ffi.errno)
+        return res
+ 
+    def Bit_SpeedCounter2(self):
+        """Bit_SpeedCounter2() -> result
+        """
+        self._set_addr(80)
+        res = SMBUS.i2c_smbus_read_byte_data(self._fd, ffi.cast('__u8', 20))
+        if res == -1:
+
+
+            raise IOError(ffi.errno)
+        return res
+ 
     @validate(addr=int, cmd=int)
     def read_word_data(self, addr, cmd):
         """read_word_data(addr, cmd) -> result
